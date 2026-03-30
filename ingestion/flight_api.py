@@ -142,7 +142,7 @@ if __name__ == "__main__":
     print(json.dumps(summary, indent=2))
 
     print("\n" + "="*50)
-    print("TEST 2: Last 30 Days of FI614 History")
+    print("TEST 2: Last 7 Days of FI614 History")
     print("="*50)
     history = get_flight_history()
     print(f"Total records returned: {len(history)}")
