@@ -81,7 +81,7 @@ def get_flight_summary(flight_number=FLIGHT_NUMBER, flight_date=FLIGHT_DATE):
 # Asks FR24: "How has FI614 performed over the last 30 days?"
 # Call once at setup, then weekly.
 # ============================================================
-def get_flight_history(flight_number=FLIGHT_NUMBER, flight_date=FLIGHT_DATE, lookback_days=7):
+def get_flight_history(flight_number=FLIGHT_NUMBER, flight_date=FLIGHT_DATE, lookback_days=3):
 
     target    = datetime.strptime(flight_date, "%Y-%m-%d")
     date_from = (target - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
