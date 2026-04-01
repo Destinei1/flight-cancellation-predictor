@@ -30,30 +30,33 @@ Outputs:
 
 ---
 
-## 💾 Data Storage (SQLite)
+## 💾 Data Storage (Supabase Postgres)
 
 ### Tables
 
 #### flights
-- flight_id
-- departure_airport
-- arrival_airport
-- departure_time
+- fr24_id
+- flight
+- origin / destination
+- departed_at / arrived_at
+- aircraft, tail_number, flight_ended
 
 #### flight_history
-- flight_id
-- date
-- delay_minutes
-- cancelled
+- fr24_id
+- flight, date
+- origin / destination
+- departed_at / arrived_at
+- aircraft, cancelled
 
 #### weather
-- airport
-- date
-- severity_score
+- airport, city, date
+- temp_f, feels_like_f, humidity_pct, wind_mph
+- description, severity_score
 
 #### refund_policy
 - date
 - refund_amount
+- notes
 
 ---
 
@@ -79,7 +82,8 @@ project/
 │   ├── widget.py
 │
 ├── main.py
-└── flight_predictor.db
+├── requirements.txt
+└── .env
 ```
 
 ---
@@ -145,9 +149,9 @@ Re-evaluate: April 25
 ---
 
 ## 🔄 Automation
-- Schedule daily updates
-- Refresh API data
-- Recompute predictions
+- GitHub Actions runs `main.py` daily at 9 AM ET
+- Pulls fresh flight and weather data from APIs
+- Upserts into Supabase — no duplicates
 
 ---
 
@@ -161,7 +165,7 @@ Re-evaluate: April 25
 
 ## 🧰 Tools & Tech
 - Python
-- SQLite
+- Supabase (Postgres)
 - VS Code
 - APIs (flight + weather)
 - Optional: Streamlit / Tkinter

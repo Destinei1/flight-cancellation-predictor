@@ -1,0 +1,32 @@
+name: Daily Flight & Weather Ingestion
+
+on:
+  schedule:
+    - cron: '0 13 * * *'   # 1:00 PM UTC = 9:00 AM ET daily
+  workflow_dispatch:         # allows manual trigger from GitHub UI
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run ingestion
+        env:
+          FR24_API_KEY:        ${{ secrets.FR24_API_KEY }}
+          FLIGHT_NUMBER:       ${{ secrets.FLIGHT_NUMBER }}
+          FLIGHT_DATE:         ${{ secrets.FLIGHT_DATE }}
+          OPENWEATHER_API:     ${{ secrets.OPENWEATHER_API }}
+          SUPABASE_URL:        ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: python main.py
