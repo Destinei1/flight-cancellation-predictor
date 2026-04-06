@@ -21,7 +21,7 @@ load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env", overrid
 
 API_KEY       = os.getenv("FR24_API_KEY")
 FLIGHT_NUMBER = os.getenv("FLIGHT_NUMBER", "FI614")
-FLIGHT_DATE   = os.getenv("FLIGHT_DATE",   "2026-05-05")
+FLIGHT_DATE   = os.getenv("FLIGHT_DATE") or "2026-05-05"
 
 # ── Step 2: Headers sent with every request (your ID badge) ──
 HEADERS = {
