@@ -78,19 +78,18 @@ def get_flight_summary(flight_number=FLIGHT_NUMBER, flight_date=FLIGHT_DATE):
 
 # ============================================================
 # FUNCTION 2: get_flight_history()
-# Asks FR24: "How has FI614 performed over the last 30 days?"
+# Asks FR24: "How has FI614 performed over the last 7 days?"
 # Call once at setup, then weekly.
 # ============================================================
-def get_flight_history(flight_number=FLIGHT_NUMBER, flight_date=FLIGHT_DATE, lookback_days=3):
+def get_flight_history(flight_number=FLIGHT_NUMBER, lookback_days=7):
 
-    target    = datetime.strptime(flight_date, "%Y-%m-%d")
-    date_from = (target - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
-    date_to   = (target - timedelta(days=1)).strftime("%Y-%m-%d")
+    today     = datetime.utcnow()
+    date_from = (today - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
+    date_to   = today.strftime("%Y-%m-%d")
 
     print(f"Fetching {lookback_days} days of history for {flight_number}...")
     print(f"Date range: {date_from} to {date_to}")
 
-    # URL built manually so colons don't get encoded to %3A
     url = (
         f"{BASE_URL}/api/flight-summary/full"
         f"?flights={flight_number}"
