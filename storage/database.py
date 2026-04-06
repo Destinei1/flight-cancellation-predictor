@@ -28,9 +28,15 @@ load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env", overrid
 SUPABASE_URL        = os.getenv("SUPABASE_URL")
 SUPABASE_SECRET_KEY = os.getenv("SUPABASE_SECRET_KEY")
 
-# Create the Supabase client — this is our database connection
-# Think of it like opening a connection to your database
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_SECRET_KEY)
+_supabase_client: Client | None = None
+
+def get_client() -> Client:
+    global _supabase_client
+    if _supabase_client is None:
+        if not SUPABASE_URL or not SUPABASE_SECRET_KEY:
+            raise EnvironmentError("SUPABASE_URL and SUPABASE_SECRET_KEY must be set")
+        _supabase_client = create_client(SUPABASE_URL, SUPABASE_SECRET_KEY)
+    return _supabase_client
 
 
 # ============================================================
@@ -67,7 +73,7 @@ def save_flight_history(records: list[dict]):
         }
 
         # Upsert = insert if new, update if fr24_id already exists
-        supabase.table("flight_history") \
+        get_client().table("flight_history") \
             .upsert(row, on_conflict="fr24_id") \
             .execute()
 
@@ -104,7 +110,7 @@ def save_flight_summary(record: dict):
         "fetched_at":   record.get("fetched_at"),     # when we pulled this
     }
 
-    supabase.table("flights") \
+    get_client().table("flights") \
         .upsert(row, on_conflict="fr24_id") \
         .execute()
 
@@ -142,7 +148,7 @@ def save_weather(record: dict):
     }
 
     # Upsert on airport + date so we get one row per airport per day
-    supabase.table("weather") \
+    get_client().table("weather") \
         .upsert(row, on_conflict="airport,date") \
         .execute()
 
@@ -185,7 +191,7 @@ def save_refund_policy(records: list[dict]):
             "notes":         record.get("notes", ""),     # optional label
         }
 
-        supabase.table("refund_policy") \
+        get_client().table("refund_policy") \
             .upsert(row, on_conflict="date") \
             .execute()
 
@@ -208,7 +214,7 @@ if __name__ == "__main__":
         tables = ["flights", "flight_history", "weather", "refund_policy"]
 
         for table in tables:
-            result = supabase.table(table).select("*").limit(1).execute()
+            result = get_client().table(table).select("*").limit(1).execute()
             print(f"✅ {table} — reachable")
 
         print("\nAll tables reachable. Database is ready.")
