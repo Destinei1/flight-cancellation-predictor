@@ -12,7 +12,7 @@
 
 import os                          # reads your .env variables
 import requests                    # makes HTTP calls to the API (like a browser would)
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from dotenv import load_dotenv     # loads your .env file into Python
 from pathlib import Path
 
@@ -38,7 +38,7 @@ BASE_URL = "https://fr24api.flightradar24.com"
 # Asks FR24: "What happened on FI614 on a specific date?"
 # Call once per day as May 5 approaches.
 # ============================================================
-def get_flight_summary(flight_number=FLIGHT_NUMBER, flight_date=FLIGHT_DATE):
+def get_flight_summary(flight_number=FLIGHT_NUMBER, flight_date=datetime.now(UTC).date()):
 
     print(f"Fetching summary for {flight_number} on {flight_date}...")
 
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     import json
 
     print("\n" + "="*50)
-    print("TEST 1: Flight Summary for May 5")
+    print("TEST 1: Flight Summary for Today")
     print("="*50)
     summary = get_flight_summary()
     print(json.dumps(summary, indent=2))
