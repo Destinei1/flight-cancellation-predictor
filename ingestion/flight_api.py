@@ -35,10 +35,10 @@ BASE_URL = "https://fr24api.flightradar24.com"
 
 # ============================================================
 # FUNCTION 1: get_flight_summary()
-# Asks FR24: "What happened on FI614 on a specific date?"
+# Asks FR24: "What happened yesterday on FI614 ?"
 # Call once per day as May 5 approaches.
 # ============================================================
-def get_flight_summary(flight_number=FLIGHT_NUMBER, flight_date=datetime.now(UTC).date()):
+def get_flight_summary(flight_number=FLIGHT_NUMBER, flight_date=datetime.now(UTC).date() - timedelta(days=1)):
 
     print(f"Fetching summary for {flight_number} on {flight_date}...")
 
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     import json
 
     print("\n" + "="*50)
-    print("TEST 1: Flight Summary for Today")
+    print("TEST 1: Flight Summary for Yesterday's FI614")
     print("="*50)
     summary = get_flight_summary()
     print(json.dumps(summary, indent=2))

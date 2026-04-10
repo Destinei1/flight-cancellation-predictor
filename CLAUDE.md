@@ -59,7 +59,7 @@ Reference these names only — never suggest hardcoding values, never print `.en
 
 ```
 FLIGHTRADAR24_API_KEY
-OPENWEATHERMAP_API_KEY
+OPENWEATHER_API
 SUPABASE_URL
 SUPABASE_SECRET_KEY
 ```
